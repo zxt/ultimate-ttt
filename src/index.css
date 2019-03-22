@@ -52,3 +52,28 @@ ol, ul {
 .history-selected {
   font-weight: bold;
 }
+
+.top-ltr-diagonal-line {
+  background: linear-gradient(to top right,
+                              #fff calc(50% - 4px),
+                              #aaa, #fff calc(50% + 4px) )
+}
+
+.bottom-ltr-diagonal-line {
+  background: linear-gradient(to bottom right,
+                              #fff calc(50% - 4px),
+                              #aaa, #fff calc(50% + 4px) )
+}
+
+.horizontal-line {
+  background: linear-gradient(to bottom,
+                              #fff calc(50% - 4px),
+                              #aaa, #fff calc(50% + 4px) )
+}
+
+.vertical-line {
+
+  background: linear-gradient(to right,
+                              #fff calc(50% - 4px),
+                              #aaa, #fff calc(50% + 4px) )
+}
