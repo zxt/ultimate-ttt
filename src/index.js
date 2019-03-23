@@ -169,9 +169,13 @@ class Game extends React.Component {
 
     let status
     if (winner) {
-      status = 'Winner: ' + winner[0]
-      if(!this.state.winningMatch) {
-        this.setState({winningMatch: winner[1]})
+      if(winner === -1) {
+        status = "Draw"
+      } else {
+        status = 'Winner: ' + winner[0]
+        if(!this.state.winningMatch) {
+          this.setState({winningMatch: winner[1]})
+        }
       }
     } else {
       status ='Next player: ' +  (this.state.xIsNext ? 'X' : 'O')
@@ -222,6 +226,19 @@ function calculateWinner(squares) {
       return [squares[a], lines[i]]
     }
   }
+
+  let nonEmpty = squares.length
+  squares.forEach( x => {
+    if(x == null) {
+      nonEmpty--
+    }
+  })
+
+  // return special value to indicate draw
+  if(nonEmpty === squares.length) {
+    return -1
+  }
+
   return null
 }
 
