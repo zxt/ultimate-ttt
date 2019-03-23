@@ -53,13 +53,13 @@ ol, ul {
   font-weight: bold;
 }
 
-.top-ltr-diagonal-line {
+.forward-diagonal-line {
   background: linear-gradient(to top right,
                               #fff calc(50% - 4px),
                               #aaa, #fff calc(50% + 4px) )
 }
 
-.bottom-ltr-diagonal-line {
+.backward-diagonal-line {
   background: linear-gradient(to bottom right,
                               #fff calc(50% - 4px),
                               #aaa, #fff calc(50% + 4px) )
