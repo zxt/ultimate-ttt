@@ -5,12 +5,17 @@ import Square from './Square'
 class Board extends React.Component {
 
   renderSquare(i) {
+    let v = ''
+    if(this.props.squares[i]) {
+      v = this.props.squares[i]
+    }
     return (
       <Square
-        value={this.props.squares[i]}
+        key={this.props.boardIdx +',' + i}
         idx={i}
+        value={v}
         winningMatch={this.props.winningMatch}
-        onClick={() => this.props.onClick(i)}
+        onClick={() => this.props.onClick(this.props.boardIdx, i)}
       />
     )
   }
@@ -22,7 +27,7 @@ class Board extends React.Component {
       row.push(this.renderSquare(j+i*3))
     }
     return (
-      <div className="board-row">{row}</div>
+      <div key={'r'+i} className="board-row">{row}</div>
     )
   }
 
@@ -34,7 +39,7 @@ class Board extends React.Component {
     }
 
     return (
-      <div>
+      <div className="board">
         {board}
       </div>
     )

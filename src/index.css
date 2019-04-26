@@ -7,6 +7,18 @@ ol, ul {
   padding-left: 30px;
 }
 
+.game-board {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: space-around;
+}
+
+.board {
+  flex: 1 0 33%;
+  margin-bottom: 20px;
+  width: 40px;
+}
+
 .board-row:after {
   clear: both;
   content: "";
