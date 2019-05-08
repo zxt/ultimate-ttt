@@ -4,12 +4,25 @@ function Square(props) {
   return (
     <button className={`square
                         ${highlightMatch(props.winningMatch, props.idx)}
+                        ${colorPlayer(props.value)}
                       `}
             onClick={props.onClick}
     >
       {props.value}
     </button>
   )
+}
+
+function colorPlayer(value) {
+  let css
+
+  if(value === 'X') {
+    css = 'player-x'
+  } else {
+    css = 'player-o'
+  }
+
+  return css
 }
 
 function highlightMatch(match, idx) {

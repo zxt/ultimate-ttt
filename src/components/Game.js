@@ -11,6 +11,8 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(Array(9).fill(null)),
+        moveIndex: 0,
+        boardIndex: null,
       }],
       stepNumber: 0,
       xIsNext: true,
@@ -29,11 +31,12 @@ class Game extends React.Component {
       return
     }
 
+    // TODO: fix calculating + highlighting winner per board
     const w = calculateWinner(boards[boardIdx])
     if (w) {
-        if(!this.state.winner) {
-          this.setState({winner: w})
-        }
+      if(this.state.winner !== []) {
+        this.setState({winner: w})
+      }
       return
     }
 
@@ -42,6 +45,7 @@ class Game extends React.Component {
       history: history.concat([{
         squares: boards,
         moveIndex: squareIdx,
+        boardIndex: boardIdx,
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
@@ -87,7 +91,9 @@ class Game extends React.Component {
       ]
       const moveCoordinates = boardCoordinates[step.moveIndex]
       const desc = move ?
-        'Go to move #' + move + '(' + player + ',' + moveCoordinates + ')' :
+        'Go to move #' + move + ' (' + player + ', ' +
+                                      'board#' + step.boardIndex + ', ' +
+                                      moveCoordinates + ' )' :
         'Go to game start'
 
       let className = ''

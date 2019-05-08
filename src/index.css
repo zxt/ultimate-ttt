@@ -90,3 +90,11 @@ ol, ul {
                               #fff calc(50% - 4px),
                               #aaa, #fff calc(50% + 4px) )
 }
+
+.player-x {
+ color: red;
+}
+
+.player-o {
+ color: blue;
+}
