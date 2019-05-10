@@ -13,11 +13,11 @@ class Game extends React.Component {
         squares: Array(9).fill(Array(9).fill(null)),
         moveIndex: 0,
         boardIndex: null,
+        winMatches: Array(9).fill(Array(2).fill(null)),
       }],
       stepNumber: 0,
       xIsNext: true,
       movesAscOrder: true,
-      winner: [],
     }
   }
 
@@ -26,26 +26,25 @@ class Game extends React.Component {
     const current = history[history.length - 1]
 
     const boards = current.squares.map(arr => arr.slice())
+    const matches = current.winMatches.map(arr => arr.slice())
 
-    if(boards[boardIdx][squareIdx]) {
-      return
-    }
-
-    // TODO: fix calculating + highlighting winner per board
-    const w = calculateWinner(boards[boardIdx])
-    if (w) {
-      if(this.state.winner !== []) {
-        this.setState({winner: w})
-      }
+    if(boards[boardIdx][squareIdx] || matches[boardIdx][0]) {
       return
     }
 
     boards[boardIdx][squareIdx] = this.state.xIsNext ? 'X' : 'O'
+
+    const w = calculateWinner(boards[boardIdx])
+    if(w && matches[boardIdx] !== null) {
+      matches[boardIdx] = w
+    }
+
     this.setState({
       history: history.concat([{
         squares: boards,
         moveIndex: squareIdx,
         boardIndex: boardIdx,
+        winMatches: matches,
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
@@ -56,7 +55,6 @@ class Game extends React.Component {
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
-      winner: [],
     })
   }
 
@@ -66,13 +64,13 @@ class Game extends React.Component {
     })
   }
 
-  renderBoard(i, s) {
+  renderBoard(i, s, m) {
     return(
         <Board
           key={'b'+i}
           boardIdx={i}
           squares={s}
-          winningMatch={this.state.winner[1]}
+          winningMatch={m}
           onClick={(i, j) => this.handleClick(i, j)}
         />
     )
@@ -113,6 +111,8 @@ class Game extends React.Component {
       moves.reverse()
     }
 
+    // TODO: fix to display correctly when 1 player wins
+    // according to ultimateTTT rules
     let winner
     if(this.state.winner) {
       winner = this.state.winner[0]
@@ -137,7 +137,9 @@ class Game extends React.Component {
 
     const boards = []
     for(let i = 0; i < 9; i++) {
-      boards.push(this.renderBoard(i, current.squares[i]))
+      boards.push(this.renderBoard(i,
+                                   current.squares[i],
+                                   current.winMatches[i][1]))
     }
 
     return (
