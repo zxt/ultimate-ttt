@@ -18,6 +18,7 @@ class Game extends React.Component {
       stepNumber: 0,
       xIsNext: true,
       movesAscOrder: true,
+      winner: null,
     }
   }
 
@@ -28,7 +29,9 @@ class Game extends React.Component {
     const boards = current.squares.map(arr => arr.slice())
     const matches = current.winMatches.map(arr => arr.slice())
 
-    if(boards[boardIdx][squareIdx] || matches[boardIdx][0]) {
+    if(boards[boardIdx][squareIdx] ||
+      matches[boardIdx][0] ||
+      this.state.winner != null ) {
       return
     }
 
@@ -37,6 +40,12 @@ class Game extends React.Component {
     const w = calculateWinner(boards[boardIdx])
     if(w && matches[boardIdx] !== null) {
       matches[boardIdx] = w
+    }
+    const gameWinner = calculateWinner(matches.map(arr => arr[0]))
+    if(gameWinner) {
+      this.setState({
+        winner: gameWinner
+      })
     }
 
     this.setState({
@@ -52,9 +61,13 @@ class Game extends React.Component {
   }
 
   jumpTo(step) {
+    if(step === this.state.stepNumber) {
+      return
+    }
     this.setState({
       stepNumber: step,
       xIsNext: (step % 2) === 0,
+      winner: null,
     })
   }
 
@@ -111,8 +124,6 @@ class Game extends React.Component {
       moves.reverse()
     }
 
-    // TODO: fix to display correctly when 1 player wins
-    // according to ultimateTTT rules
     let winner
     if(this.state.winner) {
       winner = this.state.winner[0]
