@@ -29,9 +29,11 @@ class Game extends React.Component {
     const boards = current.squares.map(arr => arr.slice())
     const matches = current.winMatches.map(arr => arr.slice())
 
-    if(boards[boardIdx][squareIdx] ||
-      matches[boardIdx][0] ||
-      this.state.winner != null ) {
+    // exit early if any of these conditions are met
+    if(current.moveIndex !== boardIdx ||    // invalid board for next move
+      boards[boardIdx][squareIdx] ||        // square already filled
+      matches[boardIdx][0] ||               // board already won
+      this.state.winner != null ) {         // game already won
       return
     }
 
