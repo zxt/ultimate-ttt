@@ -79,13 +79,19 @@ class Game extends React.Component {
     })
   }
 
-  renderBoard(i, s, m) {
+  renderBoard(i, s, m, n) {
+    let next = {
+      "nextP": this.state.xIsNext ? 'X' : 'O',
+      "nextB": n
+    }
+
     return(
         <Board
           key={'b'+i}
           boardIdx={i}
           squares={s}
           winningMatch={m}
+          nextBoard={next}
           onClick={(i, j) => this.handleClick(i, j)}
         />
     )
@@ -151,8 +157,9 @@ class Game extends React.Component {
     const boards = []
     for(let i = 0; i < 9; i++) {
       boards.push(this.renderBoard(i,
-                                   current.squares[i],
-                                   current.winMatches[i][1]))
+                                    current.squares[i],
+                                    current.winMatches[i][1],
+                                    current.moveIndex))
     }
 
     return (

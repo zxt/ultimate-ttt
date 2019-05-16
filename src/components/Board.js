@@ -31,6 +31,19 @@ class Board extends React.Component {
     )
   }
 
+  highlightBoard() {
+    let css = ''
+    if(this.props.boardIdx === this.props.nextBoard.nextB) {
+      if(this.props.nextBoard.nextP === 'X') {
+        css = 'next-board-x'
+      } else {
+        css = 'next-board-o'
+      }
+    }
+
+    return css
+  }
+
   render() {
     const board = []
 
@@ -38,8 +51,12 @@ class Board extends React.Component {
       board.push(this.renderRow(i))
     }
 
+    let css = this.highlightBoard()
+
     return (
-      <div className="board">
+      <div className={`board
+                       ${css}
+                      `}>
         {board}
       </div>
     )
