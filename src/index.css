@@ -17,7 +17,7 @@ ol, ul {
 .board {
   flex: 1 0 33%;
   margin-bottom: 20px;
-  width: 40px;
+  width: 60px;
 }
 
 .board-row:after {
@@ -36,13 +36,13 @@ ol, ul {
   float: left;
   font-size: 24px;
   font-weight: bold;
-  line-height: 34px;
-  height: 34px;
+  line-height: 54px;
+  height: 54px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 54px;
 }
 
 .square:focus {
@@ -97,4 +97,12 @@ ol, ul {
 
 .player-o {
  color: blue;
+}
+
+.next-board-x {
+  box-shadow: -7px 2px 5px 0px rgba(237,86,86,0.75);
+}
+
+.next-board-o {
+  box-shadow: -7px 2px 5px 0px rgba(89,131,255,1);
 }
