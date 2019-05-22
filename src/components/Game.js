@@ -11,7 +11,8 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(Array(9).fill(null)),
-        moveIndex: 0,
+        lastMoveIndex: -1,
+        nextMoveIndex: -1,
         boardIndex: null,
         winMatches: Array(9).fill(Array(2).fill(null)),
       }],
@@ -30,19 +31,32 @@ class Game extends React.Component {
     const matches = current.winMatches.map(arr => arr.slice())
 
     // exit early if any of these conditions are met
-    if(current.moveIndex !== boardIdx ||    // invalid board for next move
-      boards[boardIdx][squareIdx] ||        // square already filled
-      matches[boardIdx][0] ||               // board already won
-      this.state.winner != null ) {         // game already won
+    if(this.state.winner != null ||   // game already won
+        matches[boardIdx][0]) {       // board already won
       return
+    }
+    if(current.nextMoveIndex !== -1) {  // next move is not a 'free' move
+      if(current.nextMoveIndex !== boardIdx ||    // invalid board for next move
+        boards[boardIdx][squareIdx]) {            // square already filled
+        return
+      }
     }
 
     boards[boardIdx][squareIdx] = this.state.xIsNext ? 'X' : 'O'
 
     const w = calculateWinner(boards[boardIdx])
-    if(w && matches[boardIdx] !== null) {
+    if(w) {
       matches[boardIdx] = w
     }
+
+    // squareIdx determines the next board
+    // but if that board is already won,
+    // then next move is a free choice
+    let nextIdx = squareIdx
+    if(matches[squareIdx][0] !== null) {
+      nextIdx = -1
+    }
+
     const gameWinner = calculateWinner(matches.map(arr => arr[0]))
     if(gameWinner) {
       this.setState({
@@ -53,7 +67,8 @@ class Game extends React.Component {
     this.setState({
       history: history.concat([{
         squares: boards,
-        moveIndex: squareIdx,
+        lastMoveIndex: squareIdx,
+        nextMoveIndex: nextIdx,
         boardIndex: boardIdx,
         winMatches: matches,
       }]),
@@ -108,10 +123,10 @@ class Game extends React.Component {
         [2,1], [2,2], [2,3],
         [3,1], [3,2], [3,3],
       ]
-      const moveCoordinates = boardCoordinates[step.moveIndex]
+      const moveCoordinates = boardCoordinates[step.lastMoveIndex]
       const desc = move ?
         'Go to move #' + move + ' (' + player + ', ' +
-                                      'board#' + step.boardIndex + ', ' +
+                                      'board#' + (step.boardIndex+1) + ', ' +
                                       moveCoordinates + ' )' :
         'Go to game start'
 
@@ -159,7 +174,7 @@ class Game extends React.Component {
       boards.push(this.renderBoard(i,
                                     current.squares[i],
                                     current.winMatches[i][1],
-                                    current.moveIndex))
+                                    current.nextMoveIndex))
     }
 
     return (
