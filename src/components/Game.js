@@ -149,14 +149,14 @@ class Game extends React.Component {
 
     let winner
     if(this.state.winner) {
-      winner = this.state.winner[0]
+      winner = this.state.winner.player
     }
     let status
     if (winner) {
       if(winner === -1) {
         status = "Draw"
       } else {
-        status = 'Winner: ' + winner[0]
+        status = 'Winner: ' + winner.player
       }
     } else {
       status ='Next player: ' +  (this.state.xIsNext ? 'X' : 'O')
@@ -195,10 +195,10 @@ class Game extends React.Component {
 }
 
 /*
- * Returns the winner as a 2 element array
+ * Returns the winner as a 2 element object
  *
- * [0] is the player that won ('X' or 'O')
- * [1] is the matching line (a 3 element array of indices)
+ * 'player' is the player that won ('X' or 'O')
+ * 'match' is the matching line (a 3 element array of indices)
  */
 function calculateWinner(squares) {
   const lines = [
@@ -214,7 +214,8 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i]
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return [squares[a], lines[i]]
+      //return [squares[a], lines[i]]
+      return {'player': squares[a], 'match': lines[i]}
     }
   }
 
