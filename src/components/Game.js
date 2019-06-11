@@ -14,7 +14,7 @@ class Game extends React.Component {
         lastMoveIndex: -1,
         nextMoveIndex: -1,
         boardIndex: null,
-        winMatches: Array(9).fill(Array(2).fill(null)),
+        winMatches: Array(9).fill(null),
       }],
       stepNumber: 0,
       xIsNext: true,
@@ -28,11 +28,11 @@ class Game extends React.Component {
     const current = history[history.length - 1]
 
     const boards = current.squares.map(arr => arr.slice())
-    const matches = current.winMatches.map(arr => arr.slice())
+    const matches = current.winMatches.slice()
 
     // exit early if any of these conditions are met
     if(this.state.winner != null ||   // game already won
-        matches[boardIdx][0]) {       // board already won
+        matches[boardIdx]) {       // board already won
       return
     }
     if(current.nextMoveIndex !== -1) {  // next move is not a 'free' move
@@ -53,11 +53,12 @@ class Game extends React.Component {
     // but if that board is already won,
     // then next move is a free choice
     let nextIdx = squareIdx
-    if(matches[squareIdx][0] !== null) {
+    if(matches[squareIdx] !== null) {
       nextIdx = -1
     }
 
-    const gameWinner = calculateWinner(matches.map(arr => arr[0]))
+    const gameWinner = calculateWinner(matches.map(arr =>
+                                        arr ? arr.player : null))
     if(gameWinner) {
       this.setState({
         winner: gameWinner
@@ -156,7 +157,7 @@ class Game extends React.Component {
       if(winner === -1) {
         status = "Draw"
       } else {
-        status = 'Winner: ' + winner.player
+        status = 'Winner: ' + winner
       }
     } else {
       status ='Next player: ' +  (this.state.xIsNext ? 'X' : 'O')
@@ -171,9 +172,10 @@ class Game extends React.Component {
 
     const boards = []
     for(let i = 0; i < 9; i++) {
+      let match = current.winMatches[i] ? current.winMatches[i].match : null
       boards.push(this.renderBoard(i,
                                     current.squares[i],
-                                    current.winMatches[i][1],
+                                    match,
                                     current.nextMoveIndex))
     }
 
